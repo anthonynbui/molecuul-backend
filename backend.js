@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+mongoose = require("mongoose");
+
 const userServices = require('./models/user-services');
 
 const app = express();
@@ -8,6 +10,24 @@ const port = 5001;
 
 app.use(cors());
 app.use(express.json());
+
+mongoose.set('strictQuery', false);
+mongoose
+  .connect(
+    "mongodb+srv://" +
+      process.env.MONGO_USER +
+      ":" +
+      process.env.MONGO_PWD +
+      "@" +
+      process.env.MONGO_CLUSTER +
+      "/" +
+      process.env.MONGO_DB +
+      "?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true, //useFindAndModify: false,
+      useUnifiedTopology: true,
+    }
+  )
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
